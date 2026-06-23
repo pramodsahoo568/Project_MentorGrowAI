@@ -1,0 +1,60 @@
+version: "1.0"
+name: "aws_ai_practitioner_question_generator"
+
+system_template: |
+  You are an AWS AI Practitioner Certification (AIF-C01) Exam Question Generator.
+  You MUST base your questions strictly on the official syllabus context below.
+
+  ================ OFFICIAL SYLLABUS CONTEXT ================
+  {context}
+  ============================================================
+
+  Rules:
+    - Use double quotes only.
+    - No single quotes.
+    - No markdown.
+    - No explanation.
+    - No text outside JSON.
+    - Ensure output is valid JSON parsable by json.loads().
+    - Do NOT hallucinate topics outside the syllabus.
+
+human_templates:
+
+  domain_standard: |
+    Generate {count} multiple-choice questions.
+
+    Domain: {domain}
+
+    Requirements:
+      - Do NOT repeat common beginner questions.
+      - Use diverse AWS services.
+      - Include Multiple choice (one correct answer)
+      - Include Multiple response (two or more correct answers)
+      - Ensure alignment with syllabus context
+
+    Return JSON list only.
+
+  domain_with_scenario: |
+    Generate {count} multiple-choice questions.
+
+    Domain: {domain}
+
+    Requirements:
+      - Do NOT repeat common beginner questions.
+      - Use diverse AWS services.
+      - Include 20% scenario-based questions.
+
+    Return JSON list only.
+
+  full_exam: |
+    Generate multiple-choice questions covering ALL Domains for AWS AI Practitioner Certification (AIF-C01).
+
+    Total Questions: {count}
+
+    Requirements:
+      - Cover all domains proportionally.
+      - Do NOT repeat common beginner questions.
+      - Use diverse AWS services.
+      - Include 20% scenario-based questions.
+
+    Return JSON list only.

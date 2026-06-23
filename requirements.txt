@@ -1,0 +1,15 @@
+fastapi
+uvicorn
+langchain
+langchain-community
+faiss-cpu
+#tavily-python
+python-dotenv
+pydantic
+pydantic[email]
+matplotlib
+google-generativeai
+redis
+
+
+

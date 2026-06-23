@@ -1,0 +1,25 @@
+Generate 10 practice questions for AWS AI Practitioner Domain 1
+Generate 20 practice questions for AWS AI Practitioner Domain 2
+Generate 10 practice questions for AWS AI Practitioner Domain 3
+Generate 10 practice questions for AWS AI Practitioner Domain 4
+Generate 10 practice questions for AWS AI Practitioner Domain 5
+Generate 20 practice questions for AWS AI Practitioner Domain 3
+Generate 30 practice questions for AWS AI Practitioner mixed domains
+Generate 65 practice questions for AWS AI Practitioner Full Exam
+
+Generate 10 practice questions for Exam: AWS AI Practitioner Domain: Domain 1
+Generate 10 practice questions for Exam: AWS AI Practitioner Domain: Domain 2
+Generate 10 practice questions for Exam: AWS AI Practitioner Domain: Domain 3
+Generate 65 practice questions for Exam: AWS AI Practitioner Full Exam
+
+##unknown
+please generate QA for AWS practioner exam
+please generate questions for AWS practioner exam
+
+
+Generate  practice questions for AWS AI Practitioner Domain 1
+Generate  practice questions for AWS AI Practitioner Domain 2
+Generate  practice questions for AWS AI Practitioner Domain 3
+Generate  practice questions for AWS AI Practitioner Domain 4
+Generate  practice questions for AWS AI Practitioner Domain 5
+Generate  practice questions for AWS AI Practitioner Full Exam
