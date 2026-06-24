@@ -1,4 +1,1 @@
-docker ps -a
-docker start aws_mock-postgres
-docker start vigorous_beaver
-docker ps
+psql -h localhost      -p 5432      -U aws_user      -d aws_rag_db      -f mentorgrowai_create_tables.sql
