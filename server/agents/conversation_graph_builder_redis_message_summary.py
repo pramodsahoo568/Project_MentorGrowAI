@@ -9,6 +9,7 @@ from pydantic import BaseModel, Field, EmailStr
 from typing import TypedDict, Literal, Annotated,Optional
 from langchain_core.messages import BaseMessage, HumanMessage, AIMessage
 import operator
+import os
 import json
 from server.memory.redis_session_manager import RedisSessionManager
 from server.memory.postgre_longterm_memory import PostgresChatStore
@@ -206,8 +207,9 @@ conversation_graph = build_conversation_stategraph()
 
 def save_graph(graph):
     graph_path = "conversation_graph_with.png"
-    print(f"Save StateGraph:{graph_path}")
-    graph.get_graph().draw_mermaid_png(output_file_path=graph_path)
+    if os.getenv("ENABLE_GRAPH_EXPORT", "false").lower() == "true":
+        print(f"Save StateGraph:{graph_path}")
+        graph.get_graph().draw_mermaid_png(output_file_path=graph_path)
 
 
 save_graph(conversation_graph)

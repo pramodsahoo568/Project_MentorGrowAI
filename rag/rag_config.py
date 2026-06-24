@@ -1,14 +1,35 @@
-'''
-initialize  Embedding
-config pgvector db configuration
-'''
+"""
+Initialize Embedding Model
+Configure PGVector Database Connection
+"""
 
-from langchain_openai import OpenAIEmbeddings
+import os
 
 from dotenv import load_dotenv
+from langchain_openai import OpenAIEmbeddings
+
 load_dotenv()
 
-embeddings_model = OpenAIEmbeddings(model="text-embedding-3-small")
+# ---------------------------------------------------
+# Embedding Model
+# ---------------------------------------------------
 
-connection = "postgresql+psycopg://aws_user:aws_pass@localhost:5432/aws_rag_db"  # Uses psycopg3!
+embeddings_model = OpenAIEmbeddings(
+    model="text-embedding-3-small"
+)
+
+# ---------------------------------------------------
+# PostgreSQL / PGVector Configuration
+# ---------------------------------------------------
+
+connection = os.getenv(
+    "POSTGRES_DSN",
+    "postgresql+psycopg://mg_user:mg_pass@localhost:5433/mentorgrowai_db"
+)
+
 collection_name = "aws_ai_practitioner_rag"
+
+print("=" * 80)
+print(f"PGVector Collection : {collection_name}")
+print(f"PGVector Connection : {connection}")
+print("=" * 80)

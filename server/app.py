@@ -18,7 +18,7 @@ from server.llms.geminiapi import ask_gemini
 from server.llms.askopenai import ask_openai
 from server.agents.graph_builder import generate_questions, evaluate_performance
 from server.agents.conversation_graph_builder_redis_memory import chat_llm_with_stategraph
-from server.agents.conversation_graph_builder_redis_memory import chat_with_llm_stream
+##from server.agents.conversation_graph_builder_redis_memory import chat_with_llm_stream
 from server.evaluate.evaluate_test_result import evaluate_result
 from fastapi.responses import StreamingResponse
 
@@ -85,7 +85,7 @@ async def chat_endpoint(request: ChatRequest):
         "text": result,
         "sessionId": request.sessionId
     }
-
+'''
 @app.post("/api/chat/stream")
 async def chat_stream_endpoint(
     request: ChatRequest
@@ -109,6 +109,7 @@ async def chat_stream_endpoint(
             "X-Accel-Buffering": "no"
         }
     )
+'''
 
 from fastapi import HTTPException
 from pydantic import BaseModel, Field

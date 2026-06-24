@@ -1,51 +1,61 @@
-
 import re
 
+
+DOMAIN_CONFIG = {
+    "domain 1": ("Domain-1", 13),
+    "domain 2": ("Domain-2", 16),
+    "domain 3": ("Domain-3", 18),
+    "domain 4": ("Domain-4", 9),
+    "domain 5": ("Domain-5", 9),
+    "full exam": ("Full-Exam", 65),
+}
+
+
 def rule_based_classifier(user_input: str):
+    print("##rule_based_classifier")
+
+    text = user_input.lower().strip()
 
     intent = "unknown"
     domain = None
     count = 0
+    exam_name = "AWS AI Practitioner"
 
-    text = user_input.lower()
+    # Evaluate performance
+    if "evaluate performance" in text or "performance" in text or "evaluate" in text:
+        intent = "evaluate_readiness"
+        return {
+            "intent": intent,
+            "exam_name": exam_name,
+            "domain": domain,
+            "count": count,
+        }
 
-    if "question" in text:
+    # Generate questions / mock test
+    if (
+        "generate" in text
+        or "practice questions" in text
+        or "mock test" in text
+        or "question" in text
+        or "questions" in text
+    ):
         intent = "generate_questions"
 
-    elif "evaluate" in text or "performance" in text:
-        intent = "evaluate_readiness"
+        for key, value in DOMAIN_CONFIG.items():
+            if key in text:
+                domain, count = value
+                break
 
-    # Extract number
-    match = re.search(r"\d+", text)
-    if match:
-        count = int(match.group())
+        return {
+            "intent": intent,
+            "exam_name": exam_name,
+            "domain": domain,
+            "count": count,
+        }
 
-    # Domain detection
-    if "domain 1" in text:
-        domain = "Domain-1"
-        count = 13;
-    elif "domain 2" in text:
-        domain = "Domain-2"
-        count = 16;
-    elif "domain 3" in text:
-        domain = "Domain-3"
-        count = 18;
-    elif "domain 4" in text:
-        domain = "Domain-4"
-        count = 9;
-    elif "domain 5" in text:
-        domain = "Domain-5"
-        count = 9;
-    elif "full exam" in text:
-        domain = "Full-Exam"
-        count = 65
-    else:
-        intent = "unknown"
-
-    exam_name = "AWS AI Practitioner"
     return {
         "intent": intent,
         "exam_name": exam_name,
         "domain": domain,
-        "count": count
+        "count": count,
     }

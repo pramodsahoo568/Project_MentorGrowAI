@@ -2,7 +2,7 @@ import redis
 
 import json
 from datetime import datetime
-
+import os
 import redis
 from dotenv import load_dotenv
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
@@ -10,15 +10,29 @@ from langchain_openai import ChatOpenAI
 
 ## REDIS setup
 
+import os
+import redis
+
 try:
-    r = redis.Redis(host="localhost", port=6379, db=0, decode_responses=True)
+    redis_host = os.getenv("REDIS_HOST", "localhost")
+    redis_port = int(os.getenv("REDIS_PORT", "6379"))
+
+    r = redis.Redis(
+        host=redis_host,
+        port=redis_port,
+        db=0,
+        decode_responses=True,
+    )
+
     r.ping()
-    print("✅ Redis connected")
+
+    print(f"✅ Redis connected ({redis_host}:{redis_port})")
     REDIS_AVAILABLE = True
-except Exception:
-    print("⚠️  Redis not available — using in-memory dict as fallback")
+
+except Exception as e:
+    print(f"⚠️ Redis not available - using in-memory fallback: {e}")
     REDIS_AVAILABLE = False
-    r = {}  # fallback
+    r = {}
 
 # ===== REDIS-BACKED SESSION MANAGER =====
 class RedisSessionManager:

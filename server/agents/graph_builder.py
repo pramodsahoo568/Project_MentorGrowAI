@@ -13,7 +13,7 @@ import json
 from concurrent.futures import ThreadPoolExecutor
 from server.database.db_question_repository import save_question_set
 from server.classifiers.intent_classifier import rule_based_classifier
-from server.classifiers.llm_intent_classifier import llm_intent_classifier
+##from server.classifiers.llm_intent_classifier import llm_intent_classifier
 from server.database.redis_session_manager import session_manager
 from server.database.db_mocktest_repository import get_test_result_data
 import time
@@ -98,8 +98,10 @@ def intent_classifier_agent_node(state: AgentState):
     user_input = messages[-1].content.lower()
     print("User Input:", user_input)
 
-    ##result  = rule_based_classifier(user_input)
-    result = llm_intent_classifier(user_input)
+    ## Using Rules based classifier
+    result  = rule_based_classifier(user_input)
+
+    ##result = llm_intent_classifier(user_input)
 
     print("Parsed intent:", result)
 
@@ -471,11 +473,12 @@ def build_stategraph():
     return graph
 
 graph = build_stategraph()
-
+import os
 def save_graph(graph):
     graph_path = "aws_mock_workflow_graph_with_tool.png"
-    print(f"Save StateGraph:{graph_path}")
-    graph.get_graph().draw_mermaid_png(output_file_path=graph_path)
+    if os.getenv("ENABLE_GRAPH_EXPORT", "false").lower() == "true":
+        print(f"Save StateGraph:{graph_path}")
+        graph.get_graph().draw_mermaid_png(output_file_path=graph_path)
 
 save_graph(graph)
 # Run

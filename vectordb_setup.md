@@ -8,6 +8,7 @@ docker compose up -d
 docker exec -it pgvector-container psql -U aws_user -d aws_rag_db
 ## add vector extension
 CREATE EXTENSION IF NOT EXISTS vector;
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
 ## verify extension
 \dx
 

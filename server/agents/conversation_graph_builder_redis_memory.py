@@ -116,11 +116,12 @@ def build_conversation_stategraph():
 
 ##initilize graph (singleton instance , called only one when the module is loaded
 conversation_graph = build_conversation_stategraph()
-
+import os
 def save_graph(graph):
     graph_path = "conversation_graph_with.png"
-    print(f"Save StateGraph:{graph_path}")
-    graph.get_graph().draw_mermaid_png(output_file_path=graph_path)
+    if os.getenv("ENABLE_GRAPH_EXPORT", "false").lower() == "true":
+        print(f"Save StateGraph:{graph_path}")
+        graph.get_graph().draw_mermaid_png(output_file_path=graph_path)
 
 
 save_graph(conversation_graph)
