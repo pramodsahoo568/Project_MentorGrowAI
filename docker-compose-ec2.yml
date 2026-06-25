@@ -1,0 +1,49 @@
+## It creates the container from the image pramod568/mentorgrowai-backend:v1
+services:
+  backend:
+    image: pramod568/mentorgrowai-backend:v1
+    container_name: mentorgrowai-backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      REDIS_HOST: mentorgrowai-redis
+      REDIS_PORT: 6379
+      POSTGRES_HOST: mentorgrowai-pgvector
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: mentorgrowai_db
+      POSTGRES_USER: mg_user
+      POSTGRES_PASSWORD: mg_pass
+    depends_on:
+      - mentorgrowai-redis
+      - mentorgrowai-pgvector
+
+  mentorgrowai-redis:
+    image: redis:7-alpine
+    container_name: mentorgrowai-redis
+    ports:
+      - "6380:6379"
+    restart: unless-stopped
+
+  mentorgrowai-pgvector:
+    image: pgvector/pgvector:pg16
+    container_name: mentorgrowai-pgvector-container
+    environment:
+      POSTGRES_USER: mg_user
+      POSTGRES_PASSWORD: mg_pass
+      POSTGRES_DB: mentorgrowai_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - mentorgrowai_pgvector_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mg_user -d mentorgrowai_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  mentorgrowai_pgvector_data:
+    driver: local

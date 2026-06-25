@@ -107,6 +107,7 @@ CREATE TABLE IF NOT EXISTS mock_test_question_results (
     id SERIAL PRIMARY KEY,
     attempt_id INTEGER REFERENCES mock_test_attempts(attempt_id) ON DELETE CASCADE,
     user_id VARCHAR(255),
+    session_id VARCHAR(255),
     question_id INTEGER,
     domain VARCHAR(100),
     question_text TEXT,

@@ -23,11 +23,14 @@ embeddings_model = OpenAIEmbeddings(
 # ---------------------------------------------------
 
 connection = os.getenv(
-    "POSTGRES_DSN",
+    "PGVECTOR_CONNECTION",
     "postgresql+psycopg://mg_user:mg_pass@localhost:5433/mentorgrowai_db"
 )
 
-collection_name = "aws_ai_practitioner_rag"
+collection_name = os.getenv(
+    "PGVECTOR_COLLECTION_NAME",
+    "aws_ai_practitioner_rag"
+)
 
 print("=" * 80)
 print(f"PGVector Collection : {collection_name}")

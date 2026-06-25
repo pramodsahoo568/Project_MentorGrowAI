@@ -16,7 +16,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-POSTGRES_DSN = os.getenv("POSTGRES_DSN")
+POSTGRES_DSN = os.getenv("POSTGRES_CONNECTION")
 
 def get_connection():
 
