@@ -7,7 +7,7 @@ on:
 
 env:
   IMAGE_NAME: pramod568/mentorgrowai-backend
-  IMAGE_TAG: latest
+  VERSION: v1.0.1
 
 jobs:
   build-and-deploy:
