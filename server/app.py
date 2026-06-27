@@ -3,6 +3,7 @@ run the AWS Mock Test Agent REST api Server,
 >go to project root folder
  >uvicorn server.app:app --reload --port 8000
 '''
+APP_VERSION = "1.0.2"
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -30,13 +31,20 @@ To deal with CORS error
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
+        # Cloudflare Pages
+        "https://mentorgrowai-ui.pages.dev",
+
+        # Production Domain
+        "https://mentorgrowai.com",
+        "https://www.mentorgrowai.com",
+
+        # Local Development
         "http://localhost:5173",
         "http://127.0.0.1:5173",
-        "http://localhost:6001",
-        "http://127.0.0.1:6001",
         "http://localhost:5001",
         "http://127.0.0.1:5001",
-
+        "http://localhost:6001",
+        "http://127.0.0.1:6001",
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -52,6 +60,12 @@ def extract_final_ai_message(state):
             return message.content
     return None
 
+@app.get("/health")
+def health():
+    return {
+        "status": "healthy",
+        "version": APP_VERSION
+    }
 
 @app.post("/generate-questions", response_model=QuestionResponse)
 async def generate_questions_endpoint(request: QuestionRequest):
@@ -174,7 +188,7 @@ async def submit_test_endpoint(request: SubmitTestRequest):
 
 
 
-
+'''
 @app.post("/api/chat/stream")
 async def chat_stream_endpoint(
     request: ChatRequest
@@ -204,7 +218,7 @@ async def chat_stream_endpoint(
         generate(),
         media_type="text/plain"
     )
-
+'''
 @app.post(
     "/performance-summary",
     response_model=TestSummaryResponse
@@ -227,3 +241,4 @@ async def performance_summary_endpoint(
         weakAreas=result["weakAreas"],
         summary=result["summary"]
     )
+
