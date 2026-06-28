@@ -3,17 +3,15 @@ run the AWS Mock Test Agent REST api Server,
 >go to project root folder
  >uvicorn server.app:app --reload --port 8000
 '''
-APP_VERSION = "1.0.2"
+APP_VERSION = "1.0.3"
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from server.models.data_models import (QuestionRequest, QuestionResponse, ChatRequest,
                                        SubmitTestRequest,SubmitTestResponse,TestSummaryResponse,
-                                       TestSummaryRequest,DocumentChatRequest,DocumentChatResponse,SourceDocument)
-##from main_with_toolcalling import graph  # your compiled LangGraph
-from langchain_core.messages import HumanMessage, AIMessage
-import json
+                                       TestSummaryRequest)
+
 
 from server.llms.geminiapi import ask_gemini
 from server.llms.askopenai import ask_openai
@@ -132,39 +130,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-
-'''
-@app.post("/document-chat", response_model=DocumentChatResponse)
-async def document_chat_endpoint(request: DocumentChatRequest):
-    try:
-        logger.info(
-            "Document chat request received | userId=%s | sessionId=%s",
-            request.userId,
-            request.sessionId
-        )
-
-        result = await chat_with_document_kb(
-            message=request.message,
-            user_id=request.userId,
-            session_id=request.sessionId
-        )
-
-        return DocumentChatResponse(
-            status="success",
-            text=result.get("answer", ""),
-            sessionId=request.sessionId,
-            sources=result.get("sources", [])
-        )
-
-    except Exception:
-        logger.exception("Document chat failed")
-
-        raise HTTPException(
-            status_code=500,
-            detail="Failed to process document chat request"
-        )
-
-'''
 
 @app.post(
     "/submit-test",
