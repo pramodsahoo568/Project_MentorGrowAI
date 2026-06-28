@@ -1,4 +1,5 @@
-# MentorGrowAI
+# MentorGrowAI 
+**AI-Powered Learning & Evaluation Platform**
 
 [![Python](https://img.shields.io/badge/Python-3.11-blue.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/API-FastAPI-009688.svg)](https://fastapi.tiangolo.com/)
@@ -7,7 +8,6 @@
 [![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL%20%2B%20pgvector-336791.svg)](https://github.com/pgvector/pgvector)
 [![Redis](https://img.shields.io/badge/Memory-Redis-red.svg)](https://redis.io/)
 
-**MentorGrowAI - AI-Powered Learning & Evaluation Platform**
 
 **Website:** https://www.mentorgrowai.com/
 
