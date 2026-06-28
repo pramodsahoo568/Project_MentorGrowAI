@@ -125,10 +125,6 @@ The React UI also references `/document-chat` for the knowledge assistant experi
 
 ```text
 .
-|-- client/
-|   `-- streamlit_ui_app.py
-|-- docs/
-|   `-- MentorAI_Architecture_Diagram.png
 |-- rag/
 |   |-- document_ingestion_pipeline.py
 |   |-- document_retrieval_pipeline.py
