@@ -3,12 +3,15 @@ run the AWS Mock Test Agent REST api Server,
 >go to project root folder
  >uvicorn server.app:app --reload --port 8000
 '''
-APP_VERSION = "1.0.3"
+APP_VERSION = "1.0.4"
 
-from fastapi import FastAPI
+import logging
+
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-from server.models.data_models import (QuestionRequest, QuestionResponse, ChatRequest,
+from server.models.data_models import (RegisterUserRequest, RegisterUserResponse,
+                                       QuestionRequest, QuestionResponse, ChatRequest,
                                        SubmitTestRequest,SubmitTestResponse,TestSummaryResponse,
                                        TestSummaryRequest)
 
@@ -20,6 +23,9 @@ from server.agents.conversation_graph_builder_redis_memory import chat_llm_with_
 ##from server.agents.conversation_graph_builder_redis_memory import chat_with_llm_stream
 from server.evaluate.evaluate_test_result import evaluate_result
 from fastapi.responses import StreamingResponse
+from server.memory.postgre_longterm_memory import PostgresChatStore
+
+logger = logging.getLogger(__name__)
 
 app = FastAPI(title="AWS Mock Test Agent Server")
 
@@ -64,6 +70,43 @@ def health():
         "status": "healthy",
         "version": APP_VERSION
     }
+
+
+@app.post(
+    "/api/register_user",
+    response_model=RegisterUserResponse
+)
+async def register_user_endpoint(request: RegisterUserRequest):
+    print("register user endpoint")
+    print("clerk_user_id: ", request.clerkUserId)
+    print("email: ", request.email)
+
+    chat_store = None
+
+    try:
+        chat_store = PostgresChatStore()
+        user = chat_store.get_or_create_user(
+            external_user_id=request.clerkUserId,
+            email=str(request.email),
+            display_name=request.name
+        )
+    except Exception as e:
+        logger.exception("Failed to register user")
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to register user"
+        ) from e
+    finally:
+        if chat_store:
+            chat_store.close()
+
+    return RegisterUserResponse(
+        status="success",
+        userId=str(user["user_id"]),
+        clerkUserId=user["clerk_user_id"],
+        email=user["email"],
+        name=user["name"]
+    )
 
 @app.post("/generate-questions", response_model=QuestionResponse)
 async def generate_questions_endpoint(request: QuestionRequest):
@@ -123,12 +166,8 @@ async def chat_stream_endpoint(
     )
 '''
 
-from fastapi import HTTPException
 from pydantic import BaseModel, Field
 from typing import Optional, List, Dict, Any
-import logging
-
-logger = logging.getLogger(__name__)
 
 
 @app.post(
@@ -206,4 +245,3 @@ async def performance_summary_endpoint(
         weakAreas=result["weakAreas"],
         summary=result["summary"]
     )
-

@@ -1,5 +1,19 @@
 from pydantic import BaseModel, EmailStr
 
+class RegisterUserRequest(BaseModel):
+    clerkUserId: str
+    email: EmailStr
+    name: str | None = None
+
+
+class RegisterUserResponse(BaseModel):
+    status: str
+    userId: str
+    clerkUserId: str
+    email: EmailStr
+    name: str | None = None
+
+
 class ChatRequest(BaseModel):
     message: str
     userId: str | None = "guest"

@@ -7,10 +7,14 @@ from datetime import datetime
 class PostgresChatStore:
 
     def __init__(self):
-        dsn = os.getenv("POSTGRES_DSN") or os.getenv("DATABASE_URL")
+        dsn = (
+            os.getenv("POSTGRES_CONNECTION")
+            or os.getenv("POSTGRES_DSN")
+            or os.getenv("DATABASE_URL")
+        )
 
         if not dsn:
-            raise ValueError("POSTGRES_DSN not configured")
+            raise ValueError("PostgreSQL connection string not configured")
 
         self.conn = psycopg2.connect(
             dsn,
@@ -20,6 +24,10 @@ class PostgresChatStore:
         self.conn.autocommit = True
 
         print("✅ Connected to PostgreSQL")
+
+    def close(self):
+        if self.conn:
+            self.conn.close()
 
     # =========================================================
     # USERS
@@ -35,18 +43,17 @@ class PostgresChatStore:
 
         query = """
         INSERT INTO users (
-            external_user_id,
+            clerk_user_id,
             email,
-            display_name,
-            auth_provider
+            name
         )
-        VALUES (%s, %s, %s, %s)
+        VALUES (%s, %s, %s)
 
-        ON CONFLICT (external_user_id)
+        ON CONFLICT (clerk_user_id)
         DO UPDATE SET
             email = EXCLUDED.email,
-            display_name = EXCLUDED.display_name,
-            updated_at = CURRENT_TIMESTAMP
+            name = EXCLUDED.name,
+            last_login_at = CURRENT_TIMESTAMP
 
         RETURNING *;
         """
@@ -57,8 +64,7 @@ class PostgresChatStore:
                 (
                     external_user_id,
                     email,
-                    display_name,
-                    auth_provider
+                    display_name
                 )
             )
 
